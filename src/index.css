@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom React Flow edge styling */
+.react-flow__edge-path {
+  stroke-dasharray: none !important;
+  animation: none !important;
+}
+
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke-dasharray: none !important;
+  animation: none !important;
+}
+
+/* Ensure connection line is also solid */
+.react-flow__connection-path {
+  stroke-dasharray: none !important;
+  animation: none !important;
+}
