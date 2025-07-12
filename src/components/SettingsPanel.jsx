@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const SettingsPanel = ({
   selectedNode,
@@ -30,10 +30,12 @@ const SettingsPanel = ({
   if (!selectedNode) return null;
 
   return (
-    <div className="w-64 bg-white border-l border-gray-200">
+    <div className="w-full lg:w-64 bg-white border-t lg:border-t-0 lg:border-l border-gray-200 h-screen overflow-y-auto">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-        <h3 className="text-sm font-medium text-gray-600">Message</h3>
+      <div className="p-3 lg:p-4 border-b border-gray-200 flex items-center justify-between">
+        <h3 className="text-sm lg:text-base font-medium text-gray-600">
+          Message
+        </h3>
         <button
           onClick={() => {
             const nodeMessage = selectedNode.data.message?.trim();
@@ -52,7 +54,7 @@ const SettingsPanel = ({
           title="Delete node"
         >
           <svg
-            className="w-4 h-4 text-gray-400 group-hover:text-red-500"
+            className="w-3 h-3 lg:w-4 lg:h-4 text-gray-400 group-hover:text-red-500"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -68,7 +70,7 @@ const SettingsPanel = ({
       </div>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="p-3 lg:p-4">
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-2">
             Text
@@ -78,8 +80,8 @@ const SettingsPanel = ({
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyPress}
             placeholder="Enter your message..."
-            className="w-full p-3 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 resize-none"
-            rows={3}
+            className="w-full p-2 lg:p-3 border border-gray-300 rounded-md text-xs lg:text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 resize-none"
+            rows={2}
           />
           <p className="text-xs text-gray-500 mt-2">
             Press Enter to save and close

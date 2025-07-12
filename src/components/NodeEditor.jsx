@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
+import toast from "react-hot-toast";
 import {
   ReactFlow,
   applyNodeChanges,
@@ -94,7 +95,7 @@ function NodeEditor({ onFlowChange }) {
       const existingEdge = edges.find((edge) => edge.source === params.source);
 
       if (existingEdge) {
-        alert("A node can only have one outgoing connection");
+        toast.error("A node can only have one outgoing connection");
         return;
       }
 
@@ -329,18 +330,19 @@ function NodeEditor({ onFlowChange }) {
   };
 
   return (
-    <div className="flex h-full relative bg-gray-100">
+    <div className="flex h-full relative bg-gray-100 flex-col lg:flex-row">
       {/* Status Bar for edge deletion hints */}
       {selectedEdges.length > 0 && (
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg text-sm flex items-center gap-2">
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-gray-800 text-white px-3 py-2 rounded-lg shadow-lg text-xs sm:text-sm flex items-center gap-2">
           <span>🗑️</span>
-          <span>
+          <span className="hidden sm:inline">
             Press{" "}
             <kbd className="px-1.5 py-0.5 bg-gray-700 rounded text-xs font-mono">
               Delete
             </kbd>{" "}
             to remove selected edge(s)
           </span>
+          <span className="sm:hidden">Delete to remove edge</span>
         </div>
       )}
 
@@ -375,16 +377,18 @@ function NodeEditor({ onFlowChange }) {
       </div>
 
       {/* Conditionally render either Settings Panel or Nodes Panel */}
-      {selectedNode ? (
-        <SettingsPanel
-          selectedNode={selectedNode}
-          onUpdateNode={onUpdateNode}
-          setSelectedNode={setSelectedNode}
-          onDeleteNode={onDeleteNode}
-        />
-      ) : (
-        <NodesPanel />
-      )}
+      <div className="order-first lg:order-last">
+        {selectedNode ? (
+          <SettingsPanel
+            selectedNode={selectedNode}
+            onUpdateNode={onUpdateNode}
+            setSelectedNode={setSelectedNode}
+            onDeleteNode={onDeleteNode}
+          />
+        ) : (
+          <NodesPanel />
+        )}
+      </div>
     </div>
   );
 }

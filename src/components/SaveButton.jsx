@@ -1,4 +1,4 @@
-import React from "react";
+import toast from "react-hot-toast";
 
 const SaveButton = ({ nodes, edges, onSave }) => {
   const validateFlow = () => {
@@ -38,21 +38,22 @@ const SaveButton = ({ nodes, edges, onSave }) => {
     const validation = validateFlow();
 
     if (!validation.isValid) {
-      alert(validation.error);
+      toast.error(validation.error);
       return;
     }
 
     // If validation passes, save the flow
     onSave({ nodes, edges });
-    alert("Flow saved successfully!");
+    toast.success("Flow saved successfully!");
   };
 
   return (
     <button
       onClick={handleSave}
-      className="px-4 py-2 bg-white text-blue-600 font-medium rounded-lg border-2 border-blue-300 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 shadow-sm"
+      className="px-3 lg:px-4 py-2 bg-white text-blue-600 font-medium rounded-lg border-2 border-blue-300 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 shadow-sm text-sm lg:text-base whitespace-nowrap"
     >
-      Save Changes
+      <span className="hidden sm:inline">Save Changes</span>
+      <span className="sm:hidden">Save</span>
     </button>
   );
 };
