@@ -2,17 +2,44 @@ import toast from "react-hot-toast";
 import { toPng, toJpeg } from "html-to-image";
 import { useState } from "react";
 
-const SaveButton = ({ nodes, edges, onSave, reactFlowRef }) => {
+const SaveButton = ({
+  nodes,
+  edges,
+  onSave,
+  reactFlowRef,
+  reactFlowInstance,
+}) => {
   const [showExportOptions, setShowExportOptions] = useState(false);
 
   const exportAsImage = async (format = "png") => {
-    if (!reactFlowRef?.current) {
+    if (!reactFlowRef?.current || !reactFlowInstance) {
       toast.error("Canvas not ready for export");
       return;
     }
 
+    if (!nodes || nodes.length === 0) {
+      toast.error("No nodes to export");
+      return;
+    }
+
+    let currentViewport = null;
+
     try {
-      // Find the viewport element that contains the actual flow
+      toast.loading("Preparing complete flow for export...");
+
+      // Store current viewport
+      currentViewport = reactFlowInstance.getViewport();
+
+      // Fit view to show all nodes
+      reactFlowInstance.fitView({ padding: 50, duration: 0 });
+
+      // Wait for the view to update
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      toast.dismiss();
+      toast.loading(`Generating ${format.toUpperCase()} image...`);
+
+      // Capture the viewport area
       const viewportElement = reactFlowRef.current.querySelector(
         ".react-flow__viewport"
       );
@@ -22,30 +49,56 @@ const SaveButton = ({ nodes, edges, onSave, reactFlowRef }) => {
         format === "png"
           ? await toPng(targetElement, {
               backgroundColor: "#f3f4f6",
-              width: 1200,
-              height: 800,
               pixelRatio: 2,
+              filter: (node) => {
+                // Exclude controls and panels from export
+                return (
+                  !node.classList?.contains("react-flow__controls") &&
+                  !node.classList?.contains("react-flow__panel") &&
+                  !node.classList?.contains("react-flow__attribution")
+                );
+              },
             })
           : await toJpeg(targetElement, {
               backgroundColor: "#f3f4f6",
-              width: 1200,
-              height: 800,
               quality: 0.9,
               pixelRatio: 2,
+              filter: (node) => {
+                // Exclude controls and panels from export
+                return (
+                  !node.classList?.contains("react-flow__controls") &&
+                  !node.classList?.contains("react-flow__panel") &&
+                  !node.classList?.contains("react-flow__attribution")
+                );
+              },
             });
 
+      // Restore original viewport
+      reactFlowInstance.setViewport(currentViewport, { duration: 0 });
+
       const link = document.createElement("a");
-      link.download = `chatbot-flow-${new Date()
+      link.download = `chatbot-flow-complete-${new Date()
         .toISOString()
         .slice(0, 10)}.${format}`;
       link.href = dataUrl;
       link.click();
 
-      toast.success(`Flow exported as ${format.toUpperCase()}`);
+      toast.dismiss();
+      toast.success(`Complete flow exported as ${format.toUpperCase()}`);
       setShowExportOptions(false);
     } catch (error) {
       console.error("Export error:", error);
-      toast.error(`Failed to export ${format.toUpperCase()}`);
+      toast.dismiss();
+      toast.error(`Failed to export ${format.toUpperCase()}: ${error.message}`);
+
+      // Restore viewport in case of error
+      if (reactFlowInstance && currentViewport) {
+        try {
+          reactFlowInstance.setViewport(currentViewport, { duration: 0 });
+        } catch (restoreError) {
+          console.error("Failed to restore viewport:", restoreError);
+        }
+      }
     }
   };
 

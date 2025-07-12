@@ -19,7 +19,7 @@ const initialNodes = [];
 const initialEdges = [];
 
 // Main NodeEditor component - handles the flow builder functionality
-function NodeEditor({ onFlowChange, reactFlowRef }) {
+function NodeEditor({ onFlowChange, reactFlowRef, onReactFlowInstanceChange }) {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
   const [selectedNode, setSelectedNode] = useState(null); // Track selected node for settings panel
@@ -355,7 +355,12 @@ function NodeEditor({ onFlowChange, reactFlowRef }) {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
-          onInit={setReactFlowInstance}
+          onInit={(instance) => {
+            setReactFlowInstance(instance);
+            if (onReactFlowInstanceChange) {
+              onReactFlowInstanceChange(instance);
+            }
+          }}
           onDrop={onDrop}
           onDragOver={onDragOver}
           onPaneClick={() => setSelectedNode(null)}

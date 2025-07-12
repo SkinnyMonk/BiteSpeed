@@ -1,6 +1,6 @@
 import SaveButton from "./SaveButton";
 
-const Header = ({ nodes, edges, onSave, reactFlowRef }) => {
+const Header = ({ nodes, edges, onSave, reactFlowRef, reactFlowInstance }) => {
   return (
     <div className="bg-white border-b border-gray-200 px-3 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
       <h1 className="text-lg lg:text-xl font-semibold text-gray-800 truncate mr-4">
@@ -12,6 +12,7 @@ const Header = ({ nodes, edges, onSave, reactFlowRef }) => {
         edges={edges}
         onSave={onSave}
         reactFlowRef={reactFlowRef}
+        reactFlowInstance={reactFlowInstance}
       />
     </div>
   );

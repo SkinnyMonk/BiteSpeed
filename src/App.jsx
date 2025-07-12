@@ -6,6 +6,7 @@ import Header from "./components/Header";
 function App() {
   const [flowData, setFlowData] = useState({ nodes: [], edges: [] });
   const reactFlowRef = useRef(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
   const handleFlowChange = useCallback((newFlowData) => {
     setFlowData(newFlowData);
@@ -22,12 +23,14 @@ function App() {
         edges={flowData.edges}
         onSave={handleSave}
         reactFlowRef={reactFlowRef}
+        reactFlowInstance={reactFlowInstance}
       />
 
       <div className="flex-1">
         <NodeEditor
           onFlowChange={handleFlowChange}
           reactFlowRef={reactFlowRef}
+          onReactFlowInstanceChange={setReactFlowInstance}
         />
       </div>
 
