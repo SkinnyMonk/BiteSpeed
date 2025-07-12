@@ -1,10 +1,11 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { Toaster } from "react-hot-toast";
 import NodeEditor from "./components/NodeEditor";
 import Header from "./components/Header";
 
 function App() {
   const [flowData, setFlowData] = useState({ nodes: [], edges: [] });
+  const reactFlowRef = useRef(null);
 
   const handleFlowChange = useCallback((newFlowData) => {
     setFlowData(newFlowData);
@@ -20,10 +21,14 @@ function App() {
         nodes={flowData.nodes}
         edges={flowData.edges}
         onSave={handleSave}
+        reactFlowRef={reactFlowRef}
       />
 
       <div className="flex-1">
-        <NodeEditor onFlowChange={handleFlowChange} />
+        <NodeEditor
+          onFlowChange={handleFlowChange}
+          reactFlowRef={reactFlowRef}
+        />
       </div>
 
       {/* Toast notifications */}

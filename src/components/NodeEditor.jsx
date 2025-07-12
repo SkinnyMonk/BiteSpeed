@@ -19,7 +19,7 @@ const initialNodes = [];
 const initialEdges = [];
 
 // Main NodeEditor component - handles the flow builder functionality
-function NodeEditor({ onFlowChange }) {
+function NodeEditor({ onFlowChange, reactFlowRef }) {
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
   const [selectedNode, setSelectedNode] = useState(null); // Track selected node for settings panel
@@ -330,7 +330,7 @@ function NodeEditor({ onFlowChange }) {
   };
 
   return (
-    <div className="flex h-full relative bg-gray-100 flex-col lg:flex-row">
+    <div className="flex h-full relative bg-gray-100 flex-col sm:flex-row">
       {/* Status Bar for edge deletion hints */}
       {selectedEdges.length > 0 && (
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-gray-800 text-white px-3 py-2 rounded-lg shadow-lg text-xs sm:text-sm flex items-center gap-2">
@@ -346,8 +346,9 @@ function NodeEditor({ onFlowChange }) {
         </div>
       )}
 
-      <div ref={reactFlowWrapper} className="flex-1">
+      <div ref={reactFlowWrapper} className="flex-1 min-w-0">
         <ReactFlow
+          ref={reactFlowRef}
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}
@@ -377,7 +378,7 @@ function NodeEditor({ onFlowChange }) {
       </div>
 
       {/* Conditionally render either Settings Panel or Nodes Panel */}
-      <div className="order-first lg:order-last">
+      <div className="order-first sm:order-last w-full sm:w-64 flex-shrink-0">
         {selectedNode ? (
           <SettingsPanel
             selectedNode={selectedNode}

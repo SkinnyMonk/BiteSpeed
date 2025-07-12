@@ -30,9 +30,9 @@ const SettingsPanel = ({
   if (!selectedNode) return null;
 
   return (
-    <div className="w-full lg:w-64 bg-white border-t lg:border-t-0 lg:border-l border-gray-200 h-screen overflow-y-auto">
+    <div className="w-full bg-white border-t sm:border-t-0 sm:border-l border-gray-200 h-52 sm:h-full overflow-y-auto">
       {/* Header */}
-      <div className="p-3 lg:p-4 border-b border-gray-200 flex items-center justify-between">
+      <div className="p-3 sm:p-3 lg:p-4 border-b border-gray-200 flex items-center justify-between">
         <h3 className="text-sm lg:text-base font-medium text-gray-600">
           Message
         </h3>
@@ -70,22 +70,24 @@ const SettingsPanel = ({
       </div>
 
       {/* Content */}
-      <div className="p-3 lg:p-4">
-        <div>
-          <label className="block text-xs font-medium text-gray-600 mb-2">
+      <div className="p-3 sm:p-3 lg:p-4">
+        <div className="flex flex-col sm:block">
+          <label className="block text-sm font-medium text-gray-600 mb-2 sm:mb-2">
             Text
           </label>
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={handleKeyPress}
-            placeholder="Enter your message..."
-            className="w-full p-2 lg:p-3 border border-gray-300 rounded-md text-xs lg:text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 resize-none"
-            rows={2}
-          />
-          <p className="text-xs text-gray-500 mt-2">
-            Press Enter to save and close
-          </p>
+          <div className="flex-1">
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={handleKeyPress}
+              placeholder="Enter your message..."
+              className="w-full p-3 lg:p-3 border border-gray-300 rounded-md text-sm lg:text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 resize-none"
+              rows={2}
+            />
+            <p className="text-xs text-gray-500 mt-2 sm:mt-2">
+              Press Enter to save and close
+            </p>
+          </div>
         </div>
       </div>
     </div>
